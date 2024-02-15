@@ -115,6 +115,10 @@ class TicketArticlesController < ApplicationController
                                                      ))
     end
 
+    if clean_params[:internal] == false
+      authorize!(article, :external?) ## Tyler: TODO: Need to check that this doesnt stop those with 'full' access
+    end
+
     article.update!(clean_params)
 
     if response_expand?

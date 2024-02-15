@@ -274,6 +274,8 @@ class TicketsController < ApplicationController
           shared_draft&.destroy
         end
 
+        # Tyler: This is where the article gets created after ticket is locked
+
         article_create(ticket, params[:article])
       end
     end

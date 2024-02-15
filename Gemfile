@@ -264,3 +264,7 @@ end
 Dir['Gemfile.local*'].each do |file|
   eval_gemfile file
 end
+
+gem "ruby-lsp", "~> 0.14.0"
+
+gem "debug", require: false

@@ -44,6 +44,7 @@ class App.Group extends App.Model
     read: __('Read')
     create: __('Create')
     change: __('Change')
+    external: __('External')
     overview: __('Overview')
     full: __('Full')
 

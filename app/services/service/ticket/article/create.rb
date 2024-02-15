@@ -2,6 +2,9 @@
 
 class Service::Ticket::Article::Create < Service::BaseWithCurrentUser
   def execute(article_data:, ticket:)
+
+    # Tyler: Don't know what services do yet, but permissions logic might need to be here too
+
     article_data.delete(:ticket_id)
 
     attachments_raw = article_data.delete(:attachments) || {}

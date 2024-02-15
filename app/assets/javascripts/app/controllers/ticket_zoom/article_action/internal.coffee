@@ -3,6 +3,9 @@ class Internal
     return actions if !ticket.editable()
     return actions if ticket.currentView() is 'customer'
 
+    # Tyler: This is the place, subject to fixing the group_ids[1] issue
+    return actions if (!ticket.userGroupAccess('external') or !ticket.userGroupAccess('full'))
+
     if article.internal is true
       actions.push {
         name: __('set to public')

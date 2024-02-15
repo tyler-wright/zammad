@@ -900,6 +900,10 @@ class App.TicketZoom extends App.Controller
 
     if articleParams && articleParams.body
       article = new App.TicketArticle
+
+      # Tyler: I thought this was a relevant place but it doesnt seem to matter for hiding the options.
+      # This code is actually just triggered for when a new article is made.
+
       article.load(articleParams)
       errors = article.validate()
       if errors

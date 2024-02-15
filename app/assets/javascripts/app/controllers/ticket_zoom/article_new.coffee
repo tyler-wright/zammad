@@ -38,7 +38,12 @@ class App.TicketZoomArticleNew extends App.Controller
     @type = @defaults['type'] || 'note'
     @setPossibleArticleTypes()
 
-    if @ticket.currentView() is 'agent'
+
+    # Tyler: We need to modify the below statement to take into account the new permissions
+    # Tyler: TODO: The reason its .group_ids[1] is because the default group is id 1, so there needs to be another way to get it
+    
+    # If you're an agent, and you have external group access, you can access the internal selector
+    if @ticket.currentView() is 'agent' and (@ticket.userGroupAccess('external') or @ticket.userGroupAccess('full'))
       @internalSelector = true
 
     @textareaHeight =
@@ -288,6 +293,18 @@ class App.TicketZoomArticleNew extends App.Controller
         params.type_id   = type.id
         params.sender_id = sender.id
 
+
+    # Tyler: Note maybe not adopt the below code because it's doing backend validation anyway, not necessarily needed to magically switch the params
+    # to internal when the user thinks that a public article is being posted.
+
+    # if params.internal
+    #   params.internal = true
+    # else
+    #   if 'external' in App.User.current().group_ids[1] # Make sure it's not set externally unless
+    #     params.internal = false
+    #   else
+    #     params.internal = true
+
     if params.internal
       params.internal = true
     else
@@ -425,10 +442,16 @@ class App.TicketZoomArticleNew extends App.Controller
       if articleTypeConfig.name is type
         config = articleTypeConfig
 
+    # Tyler: Here is where it has to change to make sure it's not automatically selecting external for other channels when external permissions
+    # Not present on the role.
+
+    if (!@ticket.userGroupAccess('external') and !@ticket.userGroupAccess('full')) #  Make sure it's not set externally unless 
+      config.internal = true
+
     if config
       if config.internal
         @setArticleInternal(true)
-      else
+      else  
         @setArticleInternal(false)
 
     # show/hide attributes/features

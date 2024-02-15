@@ -51,6 +51,12 @@ module CreatesTicketArticles # rubocop:disable Metrics/ModuleLength
       clean_params[:internal] = false
     end
 
+    # Tyler: here and potentially above is where permissions logic for interal tickets could come in
+
+    if clean_params[:internal] == false
+      authorize!(ticket, :external?)
+    end
+
     article = Ticket::Article.new(clean_params)
     article.ticket_id = ticket.id
 
